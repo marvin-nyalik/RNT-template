@@ -2,6 +2,7 @@ import express from "express";
 import connectDb from "./config/db.mjs";
 import dotenv from "dotenv";
 import morgan from "morgan";
+import baseRouter from "./routes/index.mjs";
 
 dotenv.config();
 
@@ -11,6 +12,7 @@ const createApp = async () => {
 
   app.use(express.json());
   app.use(morgan("combined"));
+  app.use("/api", baseRouter);
 
   await connectDb();
 
