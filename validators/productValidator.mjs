@@ -9,10 +9,11 @@ const checkCategoryExists = async (categoryId) => {
   return true;
 };
 
-export const productValidator = checkSchema({
+export const productValidator = (isUpdate = false) => checkSchema({
   name: {
     escape: true,
     trim: true,
+    optional: isUpdate,
     notEmpty: {
       errorMessage: "Name must be present",
     },
@@ -25,6 +26,7 @@ export const productValidator = checkSchema({
     },
   },
   price: {
+    optional: isUpdate,
     notEmpty: {
       errorMessage: "Price must be set",
     },
@@ -38,6 +40,7 @@ export const productValidator = checkSchema({
     toFloat: true,
   },
   quantity: {
+    optional: isUpdate,
     notEmpty: {
       errorMessage: "Quantity must be set",
     },
@@ -53,6 +56,7 @@ export const productValidator = checkSchema({
   description: {
     escape: true,
     trim: true,
+    optional: isUpdate,
     notEmpty: {
       errorMessage: "Description must be present",
     },
@@ -65,8 +69,9 @@ export const productValidator = checkSchema({
     },
   },
   category: {
+    optional: isUpdate,
     notEmpty: {
-      errorMessage: "Description must be present",
+      errorMessage: "Category must be present",
     },
     custom: {
       options: checkCategoryExists,

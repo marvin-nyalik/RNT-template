@@ -14,7 +14,7 @@ const router = Router();
 router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.post("/", upload.single("image"), productValidator, createProduct);
-router.patch("/:id", productValidator, updateProduct);
+router.patch("/:id", productValidator(true), updateProduct);
 router.delete("/:id", deleteProduct);
 
 export default router;
