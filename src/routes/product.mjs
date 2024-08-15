@@ -15,9 +15,6 @@ router.get("/", getProducts);
 router.get("/:id", getProductById);
 router.post("/", upload.single("image"), productValidator, createProduct);
 router.patch("/", productValidator, updateProduct);
-router.post("/image", upload.single("avatar"), (req, res) => {
-  res.json(req.file);
-});
 router.delete("/:id", deleteProduct);
 
 export default router;
