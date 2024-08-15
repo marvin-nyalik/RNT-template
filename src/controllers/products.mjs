@@ -87,7 +87,7 @@ export const updateProduct = async (req, res) => {
     });
     await product.save();
 
-    res.status(200).json({ Message: "Product has been updates", product });
+    res.status(200).json({ Message: "Product has been updated", product });
   } catch (error) {
     console.error("Error updating product:", error);
     return res.status(500).json({ message: "A server error occurred", error });
