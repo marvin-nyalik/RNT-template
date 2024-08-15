@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import Category from "./category.mjs";
 
 const productSchema = mongoose.Schema(
   {
@@ -28,6 +27,11 @@ const productSchema = mongoose.Schema(
       required: true,
       ref: "Category",
     },
+    image: {
+      type: String,
+      required: true,
+      unique: true,
+    }
   },
   {
     timestamps: true,
