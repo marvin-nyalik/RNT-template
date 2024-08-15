@@ -4,6 +4,9 @@ import { validationResult, matchedData } from "express-validator";
 export const getCategories = async (req, res) => {
   try {
     const categories = await Category.find({});
+    if (categories.length === 0) {
+      return res.status(404).json({ message: "No categories were found" });
+    }
     return res.status(200).json(categories);
   } catch (error) {
     return res
@@ -92,6 +95,6 @@ export const deleteCategory = async (req, res) => {
   } catch (error) {
     return res
       .status(500)
-      .json({ error: "Server error, unable to delete the category." });
+      .json({ message: "Server error, unable to delete the category." });
   }
 };
