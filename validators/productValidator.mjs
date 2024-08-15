@@ -2,9 +2,6 @@ import { checkSchema } from "express-validator";
 import Category from "../src/models/category.mjs";
 
 const checkCategoryExists = async (categoryId) => {
-  if (!mongoose.Types.ObjectId.isValid(categoryId)) {
-    return Promise.reject("Invalid category ID");
-  }
   const category = await Category.findById(categoryId);
   if (!category) {
     return Promise.reject("Category does not exist");
@@ -63,8 +60,8 @@ export const productValidator = checkSchema({
       errorMessage: "Description must be a string",
     },
     isLength: {
-      options: { min: 5 },
-      errorMessage: "Description must be at least 3 chars long",
+      options: { max: 500 },
+      errorMessage: "Description cannot exceed 500 chars",
     },
   },
   category: {
