@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { categoryValidator } from "../../validators/categoryValidator.mjs";
+import { categoryValidator } from "../validators/categoryValidator.mjs";
 import {
   createCategory,
   updateCategory,

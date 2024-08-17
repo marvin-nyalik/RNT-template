@@ -6,7 +6,7 @@ import {
   deleteProduct,
   updateProduct,
 } from "../controllers/products.mjs";
-import { productValidator } from "../../validators/productValidator.mjs";
+import { productValidator } from "../validators/productValidator.mjs";
 import { upload } from "../middlewares/upload.mjs";
 
 const router = Router();
