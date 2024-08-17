@@ -1,6 +1,7 @@
 import User from "../models/user.mjs";
 import { validationResult, matchedData } from "express-validator";
 import bcrypt from "bcrypt";
+import { hashPassword, comparePassword } from "../utils/helpers.mjs";
 
 export const registerUser = async (req, res) => {
   const errors = validationResult(req);
@@ -8,17 +9,13 @@ export const registerUser = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
 
   const data = matchedData(req);
+  console.log(data)
   try {
-    if (data.password) {
-      const salt = await bcrypt.genSalt(10);
-      data.password = await bcrypt.hash(data.password, salt);
-    }
-
+    if (data.password) data.password = hashPassword(data.password)
     const user = await User.create(data);
     if (!user) return res.status(403).json({ message: "Forbidden" });
 
     const userResponse = {
-      id: user._id,
       username: user.username,
       email: user.email,
     };
