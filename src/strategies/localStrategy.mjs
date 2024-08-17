@@ -17,7 +17,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-const localAuth = passport.use(
+passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
       const user = await User.findOne({ username });
@@ -36,4 +36,4 @@ const localAuth = passport.use(
   })
 );
 
-export default localAuth;
+export default passport;
