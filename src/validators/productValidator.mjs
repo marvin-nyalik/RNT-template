@@ -1,5 +1,5 @@
 import { checkSchema } from "express-validator";
-import Category from "../src/models/category.mjs";
+import Category from "../models/category.mjs";
 
 const checkCategoryExists = async (categoryId) => {
   const category = await Category.findById(categoryId);

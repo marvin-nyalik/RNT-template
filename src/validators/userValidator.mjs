@@ -69,26 +69,4 @@ export const userValidator = () => checkSchema({
       errorMessage: "Google ID already in use",
     },
   },
-  firstName: {
-    optional: true,
-    escape: true,
-    trim: true,
-    notEmpty: {
-      errorMessage: "First name must be present",
-    },
-    isString: {
-      errorMessage: "First name must be a string",
-    },
-  },
-  lastName: {
-    optional: true,
-    escape: true,
-    trim: true,
-    notEmpty: {
-      errorMessage: "Last name must be present",
-    },
-    isString: {
-      errorMessage: "Last name must be a string",
-    },
-  },
 });
