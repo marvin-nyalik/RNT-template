@@ -1,26 +1,34 @@
 import { Router } from "express";
-import "../strategies/localStrategy.mjs";
-import "../strategies/googleStrategy.mjs";
+import { initializePassport } from "../strategies/localStrategy.mjs";
+import { configurePassport } from "../strategies/googleStrategy.mjs";
 import passport from "passport";
 
 const router = Router();
+configurePassport();
+initializePassport();
 
-router.post("/local/auth", passport.authenticate("local"), (req, res) => {
-  res.status(200).json({ msg: "Authenticated", user: req.user });
+router.post("/", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(401).json({ msg: "Authentication failed", info });
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).json({ msg: "Authenticated", user });
+    });
+  })(req, res, next);
 });
 
 router.get(
-  "/google/auth",
+  "/google",
   passport.authenticate("google", {
     scope: ["email", "profile"],
-  }),
-  (req, res) => {
-    res.status(200).json({ msg: "Authenticated" });
-  }
+  })
 );
-
-router.get("/auth/google", passport.authenticate("google"), (req, res) => {
-  res.status(200).json({ msg: "Authenticated", user: req.user });
-});
 
 export default router;
