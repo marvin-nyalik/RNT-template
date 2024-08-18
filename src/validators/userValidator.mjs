@@ -9,7 +9,7 @@ const checkEmailExists = async (email) => {
   return true;
 };
 
-export const userValidator = () => checkSchema({
+export const userValidator = checkSchema({
   username: {
     escape: true,
     trim: true,
