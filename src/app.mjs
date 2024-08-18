@@ -5,14 +5,14 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import morgan from "morgan";
 import baseRouter from "./routes/index.mjs";
-import mongoose from "mongoose";
 import passport from "passport";
+import { configurePassport } from "../src/strategies/googleStrategy.mjs";
 
 dotenv.config();
-
+configurePassport();
 const createApp = async () => {
   const app = express();
-  const PORT = process.env.PORT || 3001;
+  const PORT = process.env.PORT || 3000;
 
   app.use(express.json());
   app.use(morgan("combined"));
@@ -37,6 +37,11 @@ const createApp = async () => {
   );
   app.use(passport.initialize());
   app.use(passport.session());
+
+  app.get("/auth/google", passport.authenticate("google"), (req, res) => {
+    res.status(200).json({ message: "Authenticated", user: req.user });
+  });
+
   app.use("/api", baseRouter);
 
   await connectDb();
