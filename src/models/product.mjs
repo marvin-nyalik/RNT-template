@@ -18,6 +18,7 @@ const productSchema = mongoose.Schema(
       required: true,
       min: 0,
     },
+    stockThreshold: { type: Number, required: true, default: 10 },
     description: {
       type: String,
       trim: true,
@@ -31,7 +32,7 @@ const productSchema = mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-    }
+    },
   },
   {
     timestamps: true,
