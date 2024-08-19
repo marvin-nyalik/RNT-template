@@ -1,5 +1,6 @@
 import Product from "../models/product.mjs";
 import { validationResult, matchedData } from "express-validator";
+import { sendStockAlert } from "../utils/alerts.mjs";
 
 export const getProducts = async (req, res) => {
   try {
@@ -40,7 +41,7 @@ export const createProduct = async (req, res) => {
   if (req.file) {
     data.image = req.file.path;
   } else {
-    return res.status(400).json({ message: 'Image is required' });
+    return res.status(400).json({ message: "Image is required" });
   }
   try {
     const product = await Product.create(data);
@@ -110,5 +111,41 @@ export const deleteProduct = async (req, res) => {
     return res
       .status(500)
       .json({ message: "A server error prevented deletion", error });
+  }
+};
+
+export const updateProductQuantity = async (req, res) => {
+  const { productId } = req.params;
+  const { quantityChange, action } = req.body;
+
+  try {
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (action === "add") {
+      product.quantity += Math.abs(quantityChange);
+    } else if (action === "sell") {
+      product.quantity -= Math.abs(quantityChange);
+      if (product.quantity < 0) {
+        return res
+          .status(400)
+          .json({ message: "Insufficient quantity to actualize the sale" });
+      }
+    } else {
+      return res.status(400).json({ message: "Invalid stock update action" });
+    }
+    if (product.quantity < product.stockThreshold) {
+      sendStockAlert(product);
+    }
+    await product.save();
+    return res
+      .status(200)
+      .json({ message: "Product quantity updated successfully", product });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "A server error occurred", error: error.message });
   }
 };
