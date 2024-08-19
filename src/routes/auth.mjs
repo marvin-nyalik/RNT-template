@@ -2,6 +2,7 @@ import { Router } from "express";
 import { initializePassport } from "../strategies/localStrategy.mjs";
 import { configurePassport } from "../strategies/googleStrategy.mjs";
 import passport from "passport";
+import logoutMiddleware from "../middlewares/logout.mjs";
 
 const router = Router();
 configurePassport();
@@ -30,5 +31,7 @@ router.get(
     scope: ["email", "profile"],
   })
 );
+
+router.post("/logout", logoutMiddleware);
 
 export default router;
