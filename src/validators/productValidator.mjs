@@ -9,73 +9,88 @@ const checkCategoryExists = async (categoryId) => {
   return true;
 };
 
-export const productValidator = (isUpdate = false) => checkSchema({
-  name: {
-    escape: true,
-    trim: true,
-    optional: isUpdate,
-    notEmpty: {
-      errorMessage: "Name must be present",
+export const productValidator = (isUpdate = false) =>
+  checkSchema({
+    name: {
+      escape: true,
+      trim: true,
+      optional: isUpdate,
+      notEmpty: {
+        errorMessage: "Name must be present",
+      },
+      isString: {
+        errorMessage: "Name must be a string",
+      },
+      isLength: {
+        options: { min: 3 },
+        errorMessage: "Name must be at least 3 chars long",
+      },
     },
-    isString: {
-      errorMessage: "Name must be a string",
+    price: {
+      optional: isUpdate,
+      notEmpty: {
+        errorMessage: "Price must be set",
+      },
+      isNumeric: {
+        errorMessage: "Price must be a number",
+      },
+      isFloat: {
+        options: { min: 0 },
+        errorMessage: "Price must be a positive number",
+      },
+      toFloat: true,
     },
-    isLength: {
-      options: { min: 3 },
-      errorMessage: "Name must be at least 3 chars long",
+    stockThreshold: {
+      optional: isUpdate,
+      notEmpty: {
+        errorMessage: "Stock threshold must be set",
+      },
+      isNumeric: {
+        errorMessage: "Stock threshold must be a number",
+      },
+      isFloat: {
+        options: { min: 10 },
+        errorMessage: "Stock threshold must be a positive number",
+      },
+      toFloat: true,
     },
-  },
-  price: {
-    optional: isUpdate,
-    notEmpty: {
-      errorMessage: "Price must be set",
+    quantity: {
+      optional: isUpdate,
+      notEmpty: {
+        errorMessage: "Quantity must be set",
+      },
+      isNumeric: {
+        errorMessage: "Quantity must be a number",
+      },
+      isInt: {
+        options: { min: 0 },
+        errorMessage: "Quantity must be a positive whole number",
+      },
+      toInt: true,
     },
-    isNumeric: {
-      errorMessage: "Price must be a number",
+    description: {
+      escape: true,
+      trim: true,
+      optional: isUpdate,
+      notEmpty: {
+        errorMessage: "Description must be present",
+      },
+      isString: {
+        errorMessage: "Description must be a string",
+      },
+      isLength: {
+        options: { max: 500 },
+        errorMessage: "Description cannot exceed 500 chars",
+      },
     },
-    isFloat: {
-      options: { min: 0 },
-      errorMessage: "Price must be a positive number",
+    category: {
+      optional: isUpdate,
+      notEmpty: {
+        errorMessage: "Category must be present",
+      },
+      custom: {
+        options: checkCategoryExists,
+        errorMessage: "Invalid/Non-existent category",
+      },
     },
-    toFloat: true,
-  },
-  quantity: {
-    optional: isUpdate,
-    notEmpty: {
-      errorMessage: "Quantity must be set",
-    },
-    isNumeric: {
-      errorMessage: "Quantity must be a number",
-    },
-    isInt: {
-      options: { min: 0 },
-      errorMessage: "Quantity must be a positive whole number",
-    },
-    toInt: true,
-  },
-  description: {
-    escape: true,
-    trim: true,
-    optional: isUpdate,
-    notEmpty: {
-      errorMessage: "Description must be present",
-    },
-    isString: {
-      errorMessage: "Description must be a string",
-    },
-    isLength: {
-      options: { max: 500 },
-      errorMessage: "Description cannot exceed 500 chars",
-    },
-  },
-  category: {
-    optional: isUpdate,
-    notEmpty: {
-      errorMessage: "Category must be present",
-    },
-    custom: {
-      options: checkCategoryExists,
-      errorMessage: "Invalid/Non-existent category",
-    },
-  },
-});
+  });
