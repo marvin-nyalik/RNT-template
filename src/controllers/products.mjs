@@ -115,11 +115,11 @@ export const deleteProduct = async (req, res) => {
 };
 
 export const updateProductQuantity = async (req, res) => {
-  const { productId } = req.params;
+  const { id } = req.params;
   const { quantityChange, action } = req.body;
 
   try {
-    const product = await Product.findById(productId);
+    const product = await Product.findById(id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
